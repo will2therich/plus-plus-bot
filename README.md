@@ -1,2 +1,2 @@
-# jokes-bot
-A slack bot that tells you jokes
+# ++ Bot
+A slack bot that track scores from ++'s and --'s
