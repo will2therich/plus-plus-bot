@@ -1,7 +1,8 @@
 var SlackBot = require("slackbots")
 var firebase = require('firebase')
 
-const envKey = process.env.BOT_TOKEN
+// const envKey = process.env.BOT_TOKEN
+const envKey = 'xoxb-457431337684-456996751393-Ns7pq3DmgpwGKywVTYwFiGKd'
 
 var points = []
 
@@ -48,7 +49,7 @@ const removePointFromUser = (name) => {
 
 function getUserScore(name) {
     points.forEach(function (item){
-        if (item.name === name) {
+        if (item.name.toLowerCase() === name.toLowerCase()) {
             bot.postMessageToChannel('general', name + "'s current score is: " + item.score)
             return
         }
@@ -60,7 +61,7 @@ function updatePointsForUser(name, add) {
 
     points.forEach(function (item){
         console.dir(item)
-        if (item.name === name) {
+        if (item.name.toLowerCase() === name.toLowerCase()) {
           if (add) {
               item.score = item.score + 1
           }else {
