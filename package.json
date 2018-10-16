@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/astr0-4/jokes-bot#readme",
   "dependencies": {
+    "firebase": "^5.5.4",
     "request": "^2.81.0",
     "slackbots": "^1.0.2"
   }
