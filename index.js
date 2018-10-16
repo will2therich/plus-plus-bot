@@ -1,8 +1,7 @@
 var SlackBot = require("slackbots")
 var firebase = require('firebase')
 
-// const envKey = process.env.BOT_TOKEN
-const envKey = 'xoxb-457431337684-456996751393-Ns7pq3DmgpwGKywVTYwFiGKd'
+const envKey = process.env.BOT_TOKEN
 
 var points = []
 
@@ -70,6 +69,7 @@ function updatePointsForUser(name, add) {
 
           if (item.score < 0) {
             bot.postMessageToChannel('general', name + ' has no points so you cant remove them ;)')
+            item.score = 0
           }
 
           existing = true
@@ -98,10 +98,10 @@ function getLeaderBoard() {
 
     })
     var i = 0
-    bot.postMessageToChannel('general', '#1 : ' + board[0].name)
-    bot.postMessageToChannel('general', '#2 : ' + board[1].name)
-    bot.postMessageToChannel('general', '#3 : ' + board[2].name)
-    bot.postMessageToChannel('general', '#4 : ' + board[3].name)
-    bot.postMessageToChannel('general', '#5 : ' + board[4].name)
+    bot.postMessageToChannel('general', '#1 : ' + board[0].name + ':' + board[0].score)
+    bot.postMessageToChannel('general', '#2 : ' + board[1].name + ':' + board[1].score)
+    bot.postMessageToChannel('general', '#3 : ' + board[2].name + ':' + board[2].score)
+    bot.postMessageToChannel('general', '#4 : ' + board[3].name + ':' + board[3].score)
+    bot.postMessageToChannel('general', '#5 : ' + board[4].name + ':' + board[4].score)
 
 }
