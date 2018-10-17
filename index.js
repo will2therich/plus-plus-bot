@@ -1,7 +1,7 @@
 var SlackBot = require("slackbots")
 var firebase = require('firebase')
 
-const envKey = process.env.BOT_TOKEN
+const envKey = 'xoxb-457431337684-456996751393-Ns7pq3DmgpwGKywVTYwFiGKd'
 
 var points = []
 
@@ -75,33 +75,40 @@ function updatePointsForUser(name, add) {
         // create the new js object
         obj = {}
         obj['name'] = name
-      
+
       if(add) {
         obj['score'] = 1
       }else {
         obj['score'] = -1
       }
-      
+
         points.push(obj)
         bot.postMessageToChannel('general', 'Welcome to the leaderboard ' + name)
     }
 }
 
 function getLeaderBoard() {
-    var board = points.sort(function (p1, p2) {
+  var board = points.sort(function (p1, p2) {
 
-        if (p1.score > p2.score) return -1;
-        if (p1.score < p2.score) return 1;
+      if (p1.score > p2.score) return -1;
+      if (p1.score < p2.score) return 1;
 
-        if (p1.name > p2.name) return 1;
-        if (p1.name < p2.name) return -1;
+      if (p1.name > p2.name) return 1;
+      if (p1.name < p2.name) return -1;
 
-    })
-    var i = 0
-    bot.postMessageToChannel('general', '#1 : ' + board[0].name + ':' + board[0].score)
-    bot.postMessageToChannel('general', '#2 : ' + board[1].name + ':' + board[1].score)
-    bot.postMessageToChannel('general', '#3 : ' + board[2].name + ':' + board[2].score)
-    bot.postMessageToChannel('general', '#4 : ' + board[3].name + ':' + board[3].score)
-    bot.postMessageToChannel('general', '#5 : ' + board[4].name + ':' + board[4].score)
-
+  })
+  var i = 0
+  var int = setInterval(function() {
+    var number = i + 1;
+    if (i < 5) {
+      if (i in board) {
+        bot.postMessageToChannel('general', '#' + number + ': ' + board[i].name + ':' + board[i].score)
+        i++;
+      }else {
+        clearInterval(int)
+      }
+    }else {
+      clearInterval(int)
+    }
+  }, 500)
 }
