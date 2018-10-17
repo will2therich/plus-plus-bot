@@ -67,11 +67,6 @@ function updatePointsForUser(name, add) {
               item.score = item.score - 1
           }
 
-          if (item.score < 0) {
-            bot.postMessageToChannel('general', name + ' has no points so you cant remove them ;)')
-            item.score = 0
-          }
-
           existing = true
         }
     })
@@ -80,8 +75,13 @@ function updatePointsForUser(name, add) {
         // create the new js object
         obj = {}
         obj['name'] = name
+      
+      if(add) {
         obj['score'] = 1
-
+      }else {
+        obj['score'] = -1
+      }
+      
         points.push(obj)
         bot.postMessageToChannel('general', 'Welcome to the leaderboard ' + name)
     }
