@@ -19,7 +19,12 @@
   "homepage": "https://github.com/astr0-4/jokes-bot#readme",
   "dependencies": {
     "firebase": "^5.5.4",
+    "mysql": "^2.16.0",
     "request": "^2.81.0",
     "slackbots": "^1.0.2"
+  },
+  "devDependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0"
   }
 }
