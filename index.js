@@ -1,9 +1,14 @@
 var SlackBot = require("slackbots")
-var firebase = require('firebase')
 
 const envKey = process.env.BOT_TOKEN
+let points = []
 
-var points = []
+let bannedWords = [
+    '',
+    'cactus',
+    'name',
+    '`name',
+]
 
 // create a bot
 var bot = new SlackBot({
@@ -12,8 +17,10 @@ var bot = new SlackBot({
 })
 
 bot.on('start' , function () {
-  bot.postMessageToChannel('general', 'Plus plus bot is here :P')
+  console.log("Bot Started")
+  bot.postMessageToChannel('general', 'My incompetent coder has fixed me!')
 })
+
 
 bot.on("message", msg => {
   switch (msg.type) {
@@ -57,33 +64,37 @@ function getUserScore(name) {
 
 function updatePointsForUser(name, add) {
     var existing = false;
+    if (bannedWords.indexOf(name.toLowerCase()) > -1) {
+     console.log('Banned word provided')
+    } else {
 
-    points.forEach(function (item){
-        console.dir(item)
-        if (item.name.toLowerCase() === name.toLowerCase()) {
-          if (add) {
-              item.score = item.score + 1
-          }else {
-              item.score = item.score - 1
-          }
+        points.forEach(function (item) {
+            console.dir(item)
+            if (item.name.toLowerCase() === name.toLowerCase()) {
+                if (add) {
+                    item.score = item.score + 1
+                } else {
+                    item.score = item.score - 1
+                }
 
-          existing = true
+                existing = true
+            }
+        })
+
+        if (!existing) {
+            // create the new js object
+            obj = {}
+            obj['name'] = name
+
+            if (add) {
+                obj['score'] = 1
+            } else {
+                obj['score'] = -1
+            }
+
+            points.push(obj)
+            bot.postMessageToChannel('general', 'Welcome to the leaderboard ' + name)
         }
-    })
-
-    if (!existing) {
-        // create the new js object
-        obj = {}
-        obj['name'] = name
-
-      if(add) {
-        obj['score'] = 1
-      }else {
-        obj['score'] = -1
-      }
-
-        points.push(obj)
-        bot.postMessageToChannel('general', 'Welcome to the leaderboard ' + name)
     }
 }
 
