@@ -1,5 +1,4 @@
 var SlackBot = require("slackbots")
-var firebase = require('firebase')
 
 const envKey = process.env.BOT_TOKEN
 let points = []
@@ -19,6 +18,7 @@ var bot = new SlackBot({
 
 bot.on('start' , function () {
   console.log("Bot Started")
+  bot.postMessageToChannel('general', 'My incompetent coder has fixed me!')
 })
 
 
