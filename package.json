@@ -20,9 +20,7 @@
   "dependencies": {
     "mysql": "^2.16.0",
     "request": "^2.81.0",
-    "slackbots": "^1.0.2"
-  },
-  "devDependencies": {
+    "slackbots": "^1.0.2",
     "babel-preset-env": "^1.7.0",
     "babel-register": "^6.26.0"
   }

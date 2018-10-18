@@ -2,14 +2,24 @@
 var SlackBot = require("slackbots")
 var mysql = require('mysql');
 
-const envKey = process.env.BOT_TOKEN
-const botAdmin = process.enc.BOT_ADMIN_NAME
+// const envKey = process.env.BOT_TOKEN
+// const botAdmin = process.enc.BOT_ADMIN_NAME
+
+const envKey = 'xoxb-67235626819-457844486500-ZNSvmAmzUq19SoStKieblQZO'
+const botAdmin = 'UCUJVBK8C'
+
+// let con = mysql.createConnection({
+//   host: process.env.SQL_HOST,
+//   user: process.env.SQL_USER,
+//   password: process.env.SQL_PASSWORD,
+//   database: process.env.SQL_DATABASE
+// });
 
 let con = mysql.createConnection({
-  host: process.env.SQL_HOST,
-  user: process.env.SQL_USER,
-  password: process.env.SQL_PASSWORD,
-  database: process.env.SQL_DATABASE
+  host: 'm60mxazb4g6sb4nn.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
+  user: 'h31mmafkc9nihjf0',
+  password: 'x7r20nucz0fbg74j',
+  database: 'lqub42183532bjcy'
 });
 
 
@@ -36,13 +46,13 @@ bot.on('message', function(data) {
   if (data.type === 'message') {
     if (data.text.includes('++')) {
         let alias = data.text.split('+')[0]
-        addPointsViaAlias(alias)
+        addPointsViaAlias(alias.toLowerCase())
     }else if (data.text.includes('--')) {
         let alias = data.text.split('-')[0]
-        removePointsViaAlias(alias)
+        removePointsViaAlias(alias.toLowerCase())
     }else if (data.text.includes('??')) {
         let alias = data.text.split('?')[0]
-        getScoreViaAlias(alias)
+        getScoreViaAlias(alias.toLowerCase())
     }else if (data.text.includes('||')) {
         getLeaderBoard()
     }
@@ -51,10 +61,10 @@ bot.on('message', function(data) {
       if (data.text.includes('addAlias')) {
           let currentAlias = data.text.split('-')[1]
           let newAlias = data.text.split('-')[2]
-          addAliasToUserByAlias(newAlias,currentAlias)
+          addAliasToUserByAlias(newAlias.toLowerCase(),currentAlias.toLowerCase())
       }else if (data.text.includes('findAlias')) {
         let name = data.text.split('-')[1]
-        findUserByAlias(bot, name)
+        findUserByAlias(name.toLowerCase())
       }else if (data.text === 'allUsers') {
         getAllUsers(bot);
       } else if (data.text === 'configure') {
@@ -175,7 +185,7 @@ function addAliasToUserByAlias(newAlias, currentAlias) {
             let userToAddAliasTo = result[0].userId
             let newSql = "INSERT INTO alias (alias, userId) VALUES (? , ?)"
             con.query(newSql, [newAlias, userToAddAliasTo], function(err, result) {
-                sendAdminMessage("Alias " + newAlias + "added to: " + currentAlias)
+                sendAdminMessage("Alias " + newAlias + " added to: " + currentAlias)
 
             })
         }else{
