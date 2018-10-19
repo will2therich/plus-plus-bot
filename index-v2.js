@@ -33,6 +33,7 @@ bot.on('message', function(data) {
   // all ingoing events https://api.slack.com/rtm
   // console.log(data);
   sendAdminMessage(data)
+  sendGeneralMessage(data, 'test')
   if (data.type === 'message') {
     if (data.text.includes('++')) {
         if (messageIsDirect(data)) {
@@ -181,7 +182,7 @@ function sendAdminMessage(message) {
 }
 
 function sendGeneralMessage(msg, message) {
-    bot.postMessageToChannel(msg.channel[0], message)
+    bot.postMessage(msg.channel, message)
 }
 
 function addAliasToUser(alias, userId) {
