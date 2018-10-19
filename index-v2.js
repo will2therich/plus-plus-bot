@@ -284,6 +284,6 @@ function getLeaderBoard(msg) {
             } else {
                 clearInterval(int)
             }
-        }, 200)
+        }, 500)
     })
 }
