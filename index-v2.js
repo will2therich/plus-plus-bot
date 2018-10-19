@@ -32,10 +32,9 @@ bot.on('start' , function () {
 bot.on('message', function(data) {
   // all ingoing events https://api.slack.com/rtm
   // console.log(data);
-  sendAdminMessage(data)
-  sendGeneralMessage(data, 'test')
   if (data.type === 'message') {
     if (data.text.includes('++')) {
+      sendAdminMessage(data);
         if (messageIsDirect(data)) {
           return;
         }
@@ -43,6 +42,7 @@ bot.on('message', function(data) {
         let alias = data.text.split('+')[0]
         addPointsViaAlias(alias.toLowerCase(), data)
     }else if (data.text.includes('--')) {
+      sendAdminMessage(data);
         if (messageIsDirect(data)) {
           return;
         }
@@ -242,7 +242,7 @@ function removePointsViaAlias(alias, msg) {
                 sendGeneralMessage(msg, 'Point removed from ' + alias)
             })
         }else{
-            sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
+            sendGeneralMessage(msg, 'Can not add point to ' + alias + ' are you sure the alias exists?')
         }
     });
 }
@@ -259,11 +259,11 @@ function getScoreViaAlias(alias, msg) {
                 if (newResult[0] !== undefined) {
                     sendGeneralMessage(msg, 'Score for  ' + alias + ' is ' + newResult[0].score)
                 }else {
-                    sendGeneralMessage('I have been unable to retrieve the score for alias ' + alias)
+                    sendGeneralMessage(msg, 'I have been unable to retrieve the score for alias ' + alias)
                 }
             })
         }else{
-            sendGeneralMessage('Can not get score for ' + alias + ' are you sure the alias exists?')
+            sendGeneralMessage(msg, 'Can not get score for ' + alias + ' are you sure the alias exists?')
         }
     });
 }
