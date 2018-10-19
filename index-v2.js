@@ -32,21 +32,44 @@ bot.on('start' , function () {
 bot.on('message', function(data) {
   // all ingoing events https://api.slack.com/rtm
   // console.log(data);
+  sendAdminMessage(data)
   if (data.type === 'message') {
     if (data.text.includes('++')) {
+        if (messageIsDirect(data)) {
+          return;
+        }
+
         let alias = data.text.split('+')[0]
-        addPointsViaAlias(alias.toLowerCase())
+        addPointsViaAlias(alias.toLowerCase(), data)
     }else if (data.text.includes('--')) {
+        if (messageIsDirect(data)) {
+          return;
+        }
+
         let alias = data.text.split('-')[0]
-        removePointsViaAlias(alias.toLowerCase())
+        removePointsViaAlias(alias.toLowerCase(), data)
     }else if (data.text.includes('??')) {
-        let alias = data.text.split('?')[0]
-        getScoreViaAlias(alias.toLowerCase())
+      if (messageIsDirect(data)) {
+        return;
+      }
+
+      let alias = data.text.split('?')[0]
+      getScoreViaAlias(alias.toLowerCase(), data)
     }else if (data.text.includes('||')) {
-        getLeaderBoard()
+      // we only want to listen to direct messages that come from the user
+      if (messageIsDirect(data)) {
+        return;
+      }
+
+      getLeaderBoard(data)
     }else if (data.text.includes('karma')) {
-        let alias = data.text.split(' ')[1]
-        getScoreViaAlias(alias.toLowerCase())
+      // we only want to listen to direct messages that come from the user
+      if (messageIsDirect(data)) {
+        return;
+      }
+
+      let alias = data.text.split(' ')[1]
+      getScoreViaAlias(alias.toLowerCase(), data)
     }
 
     if (data.user === botAdmin) {
@@ -65,6 +88,12 @@ bot.on('message', function(data) {
     }
   }
 });
+
+function messageIsDirect(msg) {
+  if (msg.channel[0] === "D" && msg.bot_id === undefined) {
+    return true;
+  }
+}
 
 function findUserByAlias(string, alias = true) {
     if (alias) {
@@ -151,8 +180,8 @@ function sendAdminMessage(message) {
     bot.postMessage(botAdmin, message)
 }
 
-function sendGeneralMessage(message) {
-    bot.postMessageToChannel('general', message)
+function sendGeneralMessage(msg, message) {
+    bot.postMessageToChannel(msg.channel[0], message)
 }
 
 function addAliasToUser(alias, userId) {
@@ -186,7 +215,7 @@ function addAliasToUserByAlias(newAlias, currentAlias) {
     });
 }
 
-function addPointsViaAlias(alias) {
+function addPointsViaAlias(alias, msg) {
     let sql = "SELECT * FROM alias WHERE alias = ?"
 
     con.query(sql, alias , function (err,result) {
@@ -194,7 +223,7 @@ function addPointsViaAlias(alias) {
             let userToUpdateScore = result[0].userId
             let newSql = "UPDATE users SET score = score + 1 WHERE id = ?"
             con.query(newSql, userToUpdateScore, function(err, result) {
-                sendGeneralMessage('Point added to ' + alias)
+                sendGeneralMessage(msg, 'Point added to ' + alias)
             })
         }else{
             sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
@@ -202,14 +231,14 @@ function addPointsViaAlias(alias) {
     });
 }
 
-function removePointsViaAlias(alias) {
+function removePointsViaAlias(alias, msg) {
     let sql = "SELECT * FROM alias WHERE alias = ?"
     con.query(sql, alias , function (err,result) {
         if (result[0] !== undefined){
             let userToUpdateScore = result[0].userId
             let newSql = "UPDATE users SET score = score - 1 WHERE id = ?"
             con.query(newSql, userToUpdateScore, function(err, result) {
-                sendGeneralMessage('Point removed from ' + alias)
+                sendGeneralMessage(msg, 'Point removed from ' + alias)
             })
         }else{
             sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
@@ -217,7 +246,7 @@ function removePointsViaAlias(alias) {
     });
 }
 
-function getScoreViaAlias(alias) {
+function getScoreViaAlias(alias, msg) {
     let sql = "SELECT * FROM alias WHERE alias = ?"
     con.query(sql, alias , function (err,result) {
             if (result[0] !== undefined){
@@ -227,7 +256,7 @@ function getScoreViaAlias(alias) {
             con.query(newSql, userToGetScoreFor, function(err, newResult) {
                 console.log(newResult)
                 if (newResult[0] !== undefined) {
-                    sendGeneralMessage('Score for  ' + alias + ' is ' + newResult[0].score)
+                    sendGeneralMessage(msg, 'Score for  ' + alias + ' is ' + newResult[0].score)
                 }else {
                     sendGeneralMessage('I have been unable to retrieve the score for alias ' + alias)
                 }
@@ -238,7 +267,7 @@ function getScoreViaAlias(alias) {
     });
 }
 
-function getLeaderBoard() {
+function getLeaderBoard(msg) {
     let sql = "SELECT * FROM users ORDER BY score DESC"
     con.query(sql, function (err, result) {
         let i = 0
@@ -249,7 +278,7 @@ function getLeaderBoard() {
             if (result[i] !== undefined) {
                 item = result[i]
                 number = i + 1
-                sendGeneralMessage('#' + number + ':' + item.name + ':' + item.score)
+                sendGeneralMessage(msg, '#' + number + ':' + item.name + ':' + item.score)
                 i++
             } else {
                 clearInterval(int)
