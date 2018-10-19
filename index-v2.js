@@ -249,7 +249,7 @@ function getLeaderBoard() {
             if (result[i] !== undefined) {
                 item = result[i]
                 number = i + 1
-                sendGeneralMessage('#' + number + ':' + item.name)
+                sendGeneralMessage('#' + number + ':' + item.name + ':' + item.score)
                 i++
             } else {
                 clearInterval(int)
