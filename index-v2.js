@@ -3,7 +3,7 @@ var SlackBot = require("slackbots")
 var mysql = require('mysql');
 
  const envKey = process.env.BOT_TOKEN
- const botAdmin = process.enc.BOT_ADMIN_NAME
+ const botAdmin = process.env.BOT_ADMIN_NAME
 
 let con = mysql.createConnection({
    host: process.env.SQL_HOST,
@@ -44,6 +44,9 @@ bot.on('message', function(data) {
         getScoreViaAlias(alias.toLowerCase())
     }else if (data.text.includes('||')) {
         getLeaderBoard()
+    }else if (data.text.includes('karma')) {
+        let alias = data.text.split(' ')[1]
+        getScoreViaAlias(alias.toLowerCase())
     }
 
     if (data.user === botAdmin) {
