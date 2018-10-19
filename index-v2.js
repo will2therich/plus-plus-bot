@@ -2,26 +2,15 @@
 var SlackBot = require("slackbots")
 var mysql = require('mysql');
 
-// const envKey = process.env.BOT_TOKEN
-// const botAdmin = process.enc.BOT_ADMIN_NAME
-
-const envKey = 'xoxb-67235626819-457844486500-ZNSvmAmzUq19SoStKieblQZO'
-const botAdmin = 'UCUJVBK8C'
-
-// let con = mysql.createConnection({
-//   host: process.env.SQL_HOST,
-//   user: process.env.SQL_USER,
-//   password: process.env.SQL_PASSWORD,
-//   database: process.env.SQL_DATABASE
-// });
+ const envKey = process.env.BOT_TOKEN
+ const botAdmin = process.enc.BOT_ADMIN_NAME
 
 let con = mysql.createConnection({
-  host: 'm60mxazb4g6sb4nn.chr7pe7iynqr.eu-west-1.rds.amazonaws.com',
-  user: 'h31mmafkc9nihjf0',
-  password: 'x7r20nucz0fbg74j',
-  database: 'lqub42183532bjcy'
-});
-
+   host: process.env.SQL_HOST,
+   user: process.env.SQL_USER,
+   password: process.env.SQL_PASSWORD,
+   database: process.env.SQL_DATABASE
+ });
 
 var points = []
 
