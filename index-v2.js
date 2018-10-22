@@ -33,6 +33,7 @@ bot.on('message', function(data) {
   // all ingoing events https://api.slack.com/rtm
   // console.log(data);
   if (data.type === 'message') {
+   if (data.text !== undefined) {
     if (data.text.includes('++')) {
       sendAdminMessage(data);
         if (messageIsDirect(data)) {
@@ -87,6 +88,7 @@ bot.on('message', function(data) {
         configureForAllUsers(bot)
       }
     }
+   }
   }
 });
 
