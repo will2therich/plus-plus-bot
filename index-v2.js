@@ -227,7 +227,7 @@ function addPointsViaAlias(alias, msg) {
                 sendGeneralMessage(msg, 'Point added to ' + alias)
             })
         }else{
-            sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
+            sendGeneralMessage(msg, 'Can not add point to ' + alias + ' are you sure the alias exists?')
         }
     });
 }
@@ -242,7 +242,7 @@ function removePointsViaAlias(alias, msg) {
                 sendGeneralMessage(msg, 'Point removed from ' + alias)
             })
         }else{
-            sendGeneralMessage(msg, 'Can not add point to ' + alias + ' are you sure the alias exists?')
+            sendGeneralMessage(msg, 'Can not remove point to ' + alias + ' are you sure the alias exists?')
         }
     });
 }
