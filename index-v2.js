@@ -77,14 +77,15 @@ bot.on('message', function(data) {
       if (data.text.includes('addAlias')) {
           let currentAlias = data.text.split('-')[1]
           let newAlias = data.text.split('-')[2]
+
           addAliasToUserByAlias(newAlias.toLowerCase(),currentAlias.toLowerCase())
       }else if (data.text.includes('findAlias')) {
         let name = data.text.split('-')[1]
         findUserByAlias(name.toLowerCase())
       }else if (data.text === 'allUsers') {
-        getAllUsers(bot);
+        getAllUsers();
       } else if (data.text === 'configure') {
-        configureForAllUsers(bot)
+        configureForAllUsers()
       }
     }
   }
@@ -217,34 +218,40 @@ function addAliasToUserByAlias(newAlias, currentAlias) {
 }
 
 function addPointsViaAlias(alias, msg) {
-    let sql = "SELECT * FROM alias WHERE alias = ?"
+  if (!isMessageFromCurrentUser(msg.user, alias)) {
+      getAlias(alias).then(function(response){
+        let userToUpdateScore = response.userId
 
-    con.query(sql, alias , function (err,result) {
-        if (result[0] !== undefined){
-            let userToUpdateScore = result[0].userId
-            let newSql = "UPDATE users SET score = score + 1 WHERE id = ?"
-            con.query(newSql, userToUpdateScore, function(err, result) {
-                sendGeneralMessage(msg, 'Point added to ' + alias)
-            })
-        }else{
-            sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
-        }
-    });
+        let newSql = "UPDATE users SET score = score + 1 WHERE id = ?"
+
+        con.query(newSql, userToUpdateScore, function (err, result) {
+          sendGeneralMessage(msg, 'Point added to ' + alias)
+        })
+      }).error(function (error) {
+      sendGeneralMessage('Can not add point to ' + alias + ' are you sure the alias exists?')
+      });
+  }else {
+      sendGeneralMessage(msg, 'You cant add points to yourself!')
+  }
 }
 
+
 function removePointsViaAlias(alias, msg) {
-    let sql = "SELECT * FROM alias WHERE alias = ?"
-    con.query(sql, alias , function (err,result) {
-        if (result[0] !== undefined){
-            let userToUpdateScore = result[0].userId
-            let newSql = "UPDATE users SET score = score - 1 WHERE id = ?"
-            con.query(newSql, userToUpdateScore, function(err, result) {
-                sendGeneralMessage(msg, 'Point removed from ' + alias)
-            })
-        }else{
-            sendGeneralMessage(msg, 'Can not add point to ' + alias + ' are you sure the alias exists?')
-        }
+  if (!isMessageFromCurrentUser(msg.user, alias)) {
+    getAlias(alias).then(function(response){
+      let userToUpdateScore = response.userId
+
+      let newSql = "UPDATE users SET score = score + 1 WHERE id = ?"
+
+      con.query(newSql, userToUpdateScore, function (err, result) {
+        sendGeneralMessage(msg, 'Point removed from ' + alias)
+      })
+    }).error(function (error) {
+      sendGeneralMessage('Can not remove point from ' + alias + ' are you sure the alias exists?')
     });
+  }else {
+    sendGeneralMessage(msg, 'You cant remove points from yourself!')
+  }
 }
 
 function getScoreViaAlias(alias, msg) {
@@ -286,4 +293,42 @@ function getLeaderBoard(msg) {
             }
         }, 500)
     })
+}
+
+function getAlias(alias) {
+  return new Promise((resolve, reject) => {
+  let sql = "SELECT * FROM alias WHERE alias = ?"
+    con.query(sql, alias , function (err,result) {
+      if (result[0] !== undefined){
+          resolve(result[0])
+      }else{
+        reject("Can't find user by this alias " + alias)
+      }
+    });
+  });
+}
+
+function isMessageFromCurrentUser(user, alias) {
+  getAlias().then(function(response) {
+      getUserById(response.userId).then(function (response) {
+          if (response.userId === alias) {
+            return true
+          } else {
+            return false;
+          }
+      })
+  })
+}
+
+function getUserById(id) {
+  return new Promise((resolve, reject) => {
+    let sql = "SELECT * FROM user WHERE id = ?"
+    con.query(sql, alias , function (err,result) {
+      if (result[0] !== undefined){
+        resolve(result[0])
+      }else{
+        reject("Can't find user by id " + id)
+      }
+    });
+  });
 }
