@@ -33,6 +33,7 @@ bot.on('message', function(data) {
   // all ingoing events https://api.slack.com/rtm
   // console.log(data);
   if (data.type === 'message') {
+   if (data.text !== undefined) {
     if (data.text.includes('++')) {
       sendAdminMessage(data);
         if (messageIsDirect(data)) {
@@ -88,6 +89,7 @@ bot.on('message', function(data) {
         configureForAllUsers()
       }
     }
+   }
   }
 });
 
@@ -221,7 +223,6 @@ function addPointsViaAlias(alias, msg) {
   if (!isMessageFromCurrentUser(msg.user, alias)) {
       getAlias(alias).then(function(response){
         let userToUpdateScore = response.userId
-
         let newSql = "UPDATE users SET score = score + 1 WHERE id = ?"
 
         con.query(newSql, userToUpdateScore, function (err, result) {

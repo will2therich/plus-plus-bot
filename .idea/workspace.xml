@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="19b1dc40-26c2-470c-a984-890e30825bbc" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index-v2.js" beforeDir="false" afterPath="$PROJECT_DIR$/index-v2.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -12,16 +11,16 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="8347" />
+    <option name="totalTimeSeconds" value="8406" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-317714057">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
           <entry key="project.closed" value="2" />
-          <entry key="project.open.time.1" value="2" />
+          <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.12" value="1" />
-          <entry key="project.opened" value="4" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -36,13 +35,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="3461" />
+          <entry key="js" value="3469" />
           <entry key="txt" value="7" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="3461" />
+          <entry key="JavaScript" value="3469" />
           <entry key="PLAIN_TEXT" value="7" />
         </counts>
       </usages-collector>
@@ -103,8 +102,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index-v2.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4777">
-              <caret line="281" column="18" lean-forward="true" selection-start-line="281" selection-start-column="18" selection-end-line="281" selection-end-column="18" />
+            <state relative-caret-position="415">
+              <caret line="240" selection-start-line="240" selection-end-line="240" />
             </state>
           </provider>
         </entry>
@@ -238,6 +237,7 @@
       <workItem from="1539849351788" duration="8004000" />
       <workItem from="1539884165915" duration="4877000" />
       <workItem from="1540644396132" duration="942000" />
+      <workItem from="1540645420433" duration="77000" />
     </task>
     <task id="LOCAL-00001" summary="Updates">
       <created>1539965740676</created>
@@ -264,14 +264,14 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17826000" />
+    <option name="totallyTimeSpent" value="17903000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4967462" visible="true" weight="0.2585288" />
-      <window_info id="Structure" order="1" sideWeight="0.5032538" side_tool="true" visible="true" weight="0.2585288" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.49566162" visible="true" weight="0.26119402" />
+      <window_info id="Structure" order="1" sideWeight="0.5043384" side_tool="true" visible="true" weight="0.26119402" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -319,13 +319,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="340">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/start.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="102">
@@ -336,10 +329,17 @@
     <entry file="file://$PROJECT_DIR$/adminFunctions.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/index-v2.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4777">
-          <caret line="281" column="18" lean-forward="true" selection-start-line="281" selection-start-column="18" selection-end-line="281" selection-end-column="18" />
+        <state relative-caret-position="415">
+          <caret line="240" selection-start-line="240" selection-end-line="240" />
         </state>
       </provider>
     </entry>
