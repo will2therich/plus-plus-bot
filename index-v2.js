@@ -2,8 +2,8 @@
 var SlackBot = require("slackbots")
 var mysql = require('mysql');
 
- const envKey = process.env.BOT_TOKEN
- const botAdmin = process.env.BOT_ADMIN_NAME
+const envKey = process.env.BOT_TOKEN
+const botAdmin = process.env.BOT_ADMIN_NAME
 
 let con = mysql.createConnection({
    host: process.env.SQL_HOST,

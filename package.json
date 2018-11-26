@@ -1,7 +1,7 @@
 {
-  "name": "jokes-bot",
-  "version": "1.0.0",
-  "description": "A slack bot that tells you jokes",
+  "name": "plus-plus-bot",
+  "version": "2.0.0",
+  "description": "A slack bot that tracks karma within teams",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -18,10 +18,11 @@
   },
   "homepage": "https://github.com/astr0-4/jokes-bot#readme",
   "dependencies": {
+    "babel-preset-env": "^1.7.0",
+    "babel-register": "^6.26.0",
+    "devless-sdk": "0.0.1-alpha.1",
     "mysql": "^2.16.0",
     "request": "^2.81.0",
-    "slackbots": "^1.0.2",
-    "babel-preset-env": "^1.7.0",
-    "babel-register": "^6.26.0"
+    "slackbots": "^1.0.2"
   }
 }
