@@ -159,6 +159,7 @@ function addPointsToUser(message, msg) {
 
         if (comment !== undefined) {
           addComment(comment, msg, user, '++')
+          sendGeneralMessage("Point added to " + alias)
         }
       }
     })
@@ -195,7 +196,7 @@ function removePointsFromUser(message, msg) {
 
   // Remove the plus plus from the message and any spaces and get a comment
   let alias = message.split('--')[0].split(' ').splice(-1)[0]
-  let comment = message.split('#')[1]
+  let comment = message.split('~')[1]
 
   if (alias.trim() === '') {
     return
@@ -218,6 +219,7 @@ function removePointsFromUser(message, msg) {
 
         if (comment !== undefined) {
           addComment(comment, msg, user, '--')
+          sendGeneralMessage("Point removed from " + alias)
         }
       }
     })
