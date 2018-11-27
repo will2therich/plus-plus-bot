@@ -12,7 +12,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DarkyenusTimeTracker">
-    <option name="totalTimeSeconds" value="22864" />
+    <option name="totalTimeSeconds" value="23186" />
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="-317714057">
@@ -42,16 +42,16 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="Procfile" value="19" />
-          <entry key="js" value="10738" />
+          <entry key="js" value="10788" />
           <entry key="json" value="44" />
-          <entry key="txt" value="19" />
+          <entry key="txt" value="81" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
           <entry key="JSON" value="44" />
-          <entry key="JavaScript" value="10738" />
-          <entry key="PLAIN_TEXT" value="38" />
+          <entry key="JavaScript" value="10788" />
+          <entry key="PLAIN_TEXT" value="100" />
         </counts>
       </usages-collector>
     </session>
@@ -120,8 +120,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index-v3.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="456" column="14" selection-start-line="456" selection-start-column="14" selection-end-line="456" selection-end-column="14" />
+            <state relative-caret-position="576">
+              <caret line="221" column="34" selection-start-line="221" selection-start-column="34" selection-end-line="221" selection-end-column="34" />
             </state>
           </provider>
         </entry>
@@ -171,6 +171,7 @@
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
       <list>
+        <option value="William Rich &lt;william.rich@censornet.com&gt;" />
         <option value="Will Rich &lt;will@malamiwi.uk&gt;" />
       </list>
     </option>
@@ -279,7 +280,7 @@
       <workItem from="1540646466356" duration="30000" />
       <workItem from="1543224533171" duration="17858000" />
       <workItem from="1543309900881" duration="1628000" />
-      <workItem from="1543336196743" duration="17000" />
+      <workItem from="1543336196743" duration="505000" />
     </task>
     <task id="LOCAL-00001" summary="Updates">
       <created>1539965740676</created>
@@ -309,11 +310,25 @@
       <option name="project" value="LOCAL" />
       <updated>1543246455852</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Show 3 latest comments!">
+      <created>1543336232030</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1543336232030</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Messages on point updates">
+      <created>1543336464117</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1543336464117</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="38058000" />
+    <option name="totallyTimeSpent" value="38546000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="1912" y="-228" width="2576" height="1416" extended-state="6" />
@@ -352,7 +367,9 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Updates" />
     <MESSAGE value="V3 Creation" />
-    <option name="LAST_COMMIT_MESSAGE" value="V3 Creation" />
+    <MESSAGE value="Show 3 latest comments!" />
+    <MESSAGE value="Messages on point updates" />
+    <option name="LAST_COMMIT_MESSAGE" value="Messages on point updates" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/adminFunctions.js" />
@@ -415,8 +432,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/index-v3.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="456" column="14" selection-start-line="456" selection-start-column="14" selection-end-line="456" selection-end-column="14" />
+        <state relative-caret-position="576">
+          <caret line="221" column="34" selection-start-line="221" selection-start-column="34" selection-end-line="221" selection-end-column="34" />
         </state>
       </provider>
     </entry>

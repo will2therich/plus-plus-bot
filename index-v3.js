@@ -159,7 +159,7 @@ function addPointsToUser(message, msg) {
 
         if (comment !== undefined) {
           addComment(comment, msg, user, '++')
-          sendGeneralMessage("Point added to " + alias)
+          sendGeneralMessage(msg, "Point added to " + alias)
         }
       }
     })
@@ -219,7 +219,7 @@ function removePointsFromUser(message, msg) {
 
         if (comment !== undefined) {
           addComment(comment, msg, user, '--')
-          sendGeneralMessage("Point removed from " + alias)
+          sendGeneralMessage(msg, "Point removed from " + alias)
         }
       }
     })
