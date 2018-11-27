@@ -453,7 +453,8 @@ function getRecentHistory(userId) {
 
     let params = {
       where: ["recepientuserid," + userId],
-      size: 3
+      size: 3,
+      desc:"id"
     }
 
     dv.queryData(devLessService, 'history', params, function (response) {
