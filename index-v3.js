@@ -15,18 +15,24 @@ const dv = new DevLess(apiBaseUrl, devLessToken)
 // create a bot
 var bot = new SlackBot({
   token: envKey,
-  name: "++ Bot v3 Test"
+  name: "++ Bot v3"
 })
 
 bot.on('start' , function () {
-  sendAdminMessage("V3 Online")
+  sendAdminMessage("`++Bot V3` Online")
   authenticateDevless();
 
   // Reauth every halfhour
   setInterval(authenticateDevless, 1000 * 60 * 30)
+
+  // Reset blocks every 10 mins
+  setInterval(resetBlocks, 1000 * 60)
 })
 
 
+/**
+ * When the bot turns on
+ */
 bot.on("message", msg => {
   if (msg.user === botAdmin) {
     adminFunctions(msg.text, msg)
@@ -35,6 +41,12 @@ bot.on("message", msg => {
   }
 })
 
+/**
+ * List of admin functions
+ *
+ * @param command
+ * @param msg
+ */
 function adminFunctions(command, msg) {
   switch (command) {
     case '++configure':
@@ -42,6 +54,9 @@ function adminFunctions(command, msg) {
       break
     case '++uninstall':
       uninstall()
+      break
+    case '++clearBlocks':
+      resetBlocks()
       break
     default:
       if (command !== undefined) {
@@ -61,6 +76,12 @@ function adminFunctions(command, msg) {
   }
 }
 
+/**
+ * List of user functions
+ *
+ * @param command
+ * @param msg
+ */
 function userFunctions(command, msg) {
   switch (command) {
     case '++bot':
@@ -73,7 +94,7 @@ function userFunctions(command, msg) {
       getLeaderboard(msg)
       break
     default:
-      if (command !== undefined) {
+      if (command !== undefined && !command.includes('`')) {
         if (command.includes('++')) {
           // Plus Plus points
           addPointsToUser(command, msg)
@@ -88,12 +109,22 @@ function userFunctions(command, msg) {
   }
 }
 
+/**
+ * Add a alias to a user by Alias
+ *
+ * @param alias
+ * @param newAlias
+ * @param msg
+ */
 function addAliasToUserByAlias(alias, newAlias, msg) {
   getUserFromAlias(alias, msg).then(function (userId) {
     addAliasToUser(newAlias, userId, msg)
   })
 }
 
+/**
+ * Configures the slack server
+ */
 function configureForSlackServer() {
   bot.getUsers().then(function (data) {
     data.members.forEach(function(item) {
@@ -133,37 +164,55 @@ function addAliasToUser(alias, user_id, user) {
  * @param msg
  */
 function addPointsToUser(message, msg) {
+  getUserFromSlackId(msg.user).then(function (sender) {
 
-  // Remove the plus plus from the message and any spaces and get a comment
-  let alias = message.split('++')[0].split(' ').splice(-1)[0]
-  let comment = message.split('~')[1]
+    // Remove the plus plus from the message and any spaces and get a comment
+    let alias = message.split('++')[0].split(' ').splice(-1)[0]
+    let comment = message.split('#')[1]
 
-  if (alias.trim() === '') {
-    return
-  }
+    if (alias.trim() === '') {
+      return
+    }
 
-  if (comment !== undefined) {
-    comment = comment.trim()
-  }
+    if (comment !== undefined) {
+      comment = comment.trim()
+    }
+    let senderUser = sender.payload.results[0]
 
-  getUserFromAlias(alias, msg).then(function (id) {
-    getUserFromDevLess(id).then(function (user) {
-      user = user.payload.results[0]
-      if (user.user_id === msg.user) {
-        sendGeneralMessage(msg, "Sorry: " + alias + " you cannot plus plus yourself!")
-      } else {
-        let data = {
-          score: user.score += 1
-        }
-        updateUser(user.id, data)
+    if (senderUser.bounceNumber < 15 &&
+      senderUser.blocked === 0) {
 
-        if (comment !== undefined) {
-          addComment(comment, msg, user, '++')
-          sendGeneralMessage(msg, "Point added to " + alias)
-        }
-      }
-    })
-  })
+
+      getUserFromAlias(alias, msg).then(function (id) {
+        getUserFromDevLess(id).then(function (user) {
+          user = user.payload.results[0]
+          if (user.user_id === msg.user) {
+            sendGeneralMessage(msg, "Sorry: " + alias + " you cannot plus plus yourself!")
+          } else {
+            let data = {
+              score: user.score += 1
+            }
+            updateUser(user.id, data)
+
+            // Update the sender
+            let senderData = {
+              bounceNumber: senderUser.bounceNumber += 1
+            }
+
+            sendGeneralMessage(msg, "Point added to " + alias)
+            updateUser(senderUser.id, senderData);
+
+            if (comment !== undefined) {
+              addComment(comment, msg, user, '++')
+            }
+          }
+        })
+      })
+    } else {
+      sendGeneralMessage(msg, 'Sorry ' + sender.payload.results[0].name + ' you are temporarily banned from updating scores' +
+        ' (too many requests)')
+    }
+  });
 }
 
 /**
@@ -194,6 +243,9 @@ function getLeaderboard(msg) {
  */
 function removePointsFromUser(message, msg) {
 
+  getUserFromSlackId(msg.user).then(function (sender) {
+
+
   // Remove the plus plus from the message and any spaces and get a comment
   let alias = message.split('--')[0].split(' ').splice(-1)[0]
   let comment = message.split('~')[1]
@@ -206,23 +258,39 @@ function removePointsFromUser(message, msg) {
     comment = comment.trim()
   }
 
-  getUserFromAlias(alias, msg).then(function (id) {
-    getUserFromDevLess(id).then(function (user) {
-      user = user.payload.results[0]
-      if (user.user_id === msg.user) {
-        sendGeneralMessage(msg, "Sorry: " + alias + " you cannot minus minus yourself!")
-      } else {
-        let data = {
-          score: user.score -= 1
-        }
-        updateUser(user.id, data)
+  let senderUser = sender.payload.results[0]
 
-        if (comment !== undefined) {
-          addComment(comment, msg, user, '--')
-          sendGeneralMessage(msg, "Point removed from " + alias)
-        }
-      }
-    })
+  if (senderUser.bounceNumber < 15 &&
+    senderUser.blocked === 0) {
+
+      getUserFromAlias(alias, msg).then(function (id) {
+        getUserFromDevLess(id).then(function (user) {
+          user = user.payload.results[0]
+          if (user.user_id === msg.user) {
+            sendGeneralMessage(msg, "Sorry: " + alias + " you cannot minus minus yourself!")
+          } else {
+            let data = {
+              score: user.score -= 1,
+            }
+            sendGeneralMessage(msg, "Point removed from " + alias)
+            updateUser(user.id, data)
+
+            // Update the sender
+            let senderData = {
+              bounceNumber: senderUser.bounceNumber += 1
+            }
+            updateUser(senderUser.id, senderData);
+
+
+            if (comment !== undefined) {
+              addComment(comment, msg, user, '--')
+            }
+          }
+        })
+      })
+    } else {
+      sendGeneralMessage(msg, 'Sorry ' + sender.payload.results[0].name + ' you are temporarily banned from updating scores')
+    }
   })
 }
 
@@ -233,29 +301,38 @@ function removePointsFromUser(message, msg) {
  * @param msg
  */
 function getPointsForAUser(message, msg) {
+    // Remove the plus plus from the message and any spaces and get a comment
+    let alias = message.split('??')[0].split(' ').splice(-1)[0]
 
-  // Remove the plus plus from the message and any spaces and get a comment
-  let alias = message.split('??')[0].split(' ').splice(-1)[0]
+    getUserFromAlias(alias, msg).then(function (id) {
+      getUserFromDevLess(id).then(function (user) {
+        user = user.payload.results[0]
+        let string = "Score for " + user.name + " is " + user.score + "\n"
 
-  getUserFromAlias(alias, msg).then(function (id) {
-    getUserFromDevLess(id).then(function (user) {
-      user = user.payload.results[0]
-      let string = "Score for " + user.name + " is " + user.score + "\n"
+        getRecentHistory(user.id).then(function (historyString) {
+          string += historyString
 
-      getRecentHistory(user.id).then(function (historyString) {
-        string += historyString
-
-        sendGeneralMessage(msg, string)
+          sendGeneralMessage(msg, string)
+        })
       })
     })
-  })
+
 }
 
+/**
+ * Add a comment to the history table
+ *
+ * @param comment
+ * @param msg
+ * @param recepient
+ * @param action
+ */
 function addComment(comment, msg, recepient, action) {
   getUserFromSlackId(msg.user).then(function (sender) {
     let data = {
       comment: comment,
       senderuserid: sender.payload.results[0].id,
+      senderUser: sender.payload.results[0].name,
       recepientuserid: recepient.id,
       action: action
     }
@@ -266,6 +343,12 @@ function addComment(comment, msg, recepient, action) {
   })
 }
 
+/**
+ * Update a user in devless
+ *
+ * @param userId
+ * @param data
+ */
 function updateUser(userId, data) {
   dv.updateData(devLessService, 'user', 'id', userId, data, function (response) {
     console.log(response)
@@ -277,6 +360,9 @@ function updateUser(userId, data) {
   });
 }
 
+/**
+ * uninstall thee app.
+ */
 function uninstall() {
   bot.getUsers().then(function (data) {
     data.members.forEach(function(item) {
@@ -307,6 +393,12 @@ function createUser(data, user) {
   });
 }
 
+/**
+ * Create an alias in devless
+ *
+ * @param data
+ * @param user
+ */
 function createAlias(data, user) {
   dv.addData(devLessService, 'alias', data, function (response) {
     if (response.status_code === 628) {
@@ -356,6 +448,12 @@ function authenticateDevless() {
   })
 }
 
+/**
+ * Get a user from a devLess id
+ *
+ * @param userId
+ * @return {Promise<any>}
+ */
 function getUserFromDevLess(userId) {
   return new Promise((resolve, reject) => {
 
@@ -378,6 +476,12 @@ function getUserFromDevLess(userId) {
   });
 }
 
+/**
+ * Get a user from a slack ID
+ *
+ * @param slackId
+ * @return {Promise<any>}
+ */
 function getUserFromSlackId(slackId) {
   return new Promise((resolve, reject) => {
 
@@ -400,6 +504,13 @@ function getUserFromSlackId(slackId) {
   });
 }
 
+/**
+ * Gets a user from an alias
+ *
+ * @param alias
+ * @param msg
+ * @return {Promise<any>}
+ */
 function getUserFromAlias(alias, msg) {
   return new Promise((resolve, reject) => {
 
@@ -424,6 +535,11 @@ function getUserFromAlias(alias, msg) {
   });
 }
 
+/**
+ * Gets all users ordered by the score
+ *
+ * @return {Promise<any>}
+ */
 function getAllUsersOrderedByScore() {
   return new Promise((resolve, reject) => {
     let params = {
@@ -440,16 +556,31 @@ function getAllUsersOrderedByScore() {
         }
     })
 
-  });}
+  });
+}
 
+/**
+ * Sends a message to the channel the bot was contacted on
+ * @param msg
+ * @param message
+ */
 function sendGeneralMessage(msg, message) {
   bot.postMessage(msg.channel, message)
 }
 
+/**
+ * Sends a message to the admin
+ * @param message
+ */
 function sendAdminMessage(message) {
   bot.postMessage(botAdmin, message)
 }
 
+/**
+ * Gets the recent history for a user
+ * @param userId
+ * @return {Promise<any>}
+ */
 function getRecentHistory(userId) {
   return new Promise((resolve, reject) => {
 
@@ -465,16 +596,46 @@ function getRecentHistory(userId) {
           getRecentHistory(userId)
         }
       } else {
-        let string = "Recent changes to this user \n"
+        let string = "Recent changes to this user: \n"
 
-        response.payload.results.forEach(function (item) {
-          string += item.action + ' for ' + item.comment + ' \n'
-        })
+        if (response.payload.results.length > 1) {
+          response.payload.results.forEach(function (item) {
+            string += item.action + ' for "' + item.comment + '" from ' + item.senderUser + ' \n'
+          })
+        } else {
+          string += 'No comments for this user'
+        }
 
         resolve(string)
       }
     })
   });
+}
+
+/**
+ * Reset all blocks
+ */
+function resetBlocks() {
+  let params = {
+    'greaterThan': ["bounceNumber,0"]
+  }
+
+  dv.queryData(devLessService, 'user', params, function (response) {
+    if (response.status_code === 628) {
+      if (authenticateDevless()) {
+        resetBlocks()
+      }
+    } else {
+
+      response.payload.results.forEach(function (item) {
+        // Update the sender
+        let data = {
+          bounceNumber: 0
+        }
+        updateUser(item.id, data);
+      })
+    }
+  })
 }
 
 
