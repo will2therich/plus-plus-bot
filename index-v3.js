@@ -248,7 +248,7 @@ function removePointsFromUser(message, msg) {
 
   // Remove the plus plus from the message and any spaces and get a comment
   let alias = message.split('--')[0].split(' ').splice(-1)[0]
-  let comment = message.split('~')[1]
+  let comment = message.split('#')[1]
 
   if (alias.trim() === '') {
     return
@@ -380,6 +380,7 @@ function uninstall() {
  */
 function createUser(data, user) {
   dv.addData(devLessService, 'user', data, function (response) {
+    console.dir(response)
     if (response.status_code === 628) {
       if (authenticateDevless()) {
         createUser(data, user)
@@ -441,6 +442,7 @@ function deleteUser(userId) {
  */
 function authenticateDevless() {
   dv.authenticate('login', [devLessUsername, '', '', devLessPassword], function (response) {
+    console.dir(response)
     if (response.status_code === 637) {
       return true
     }
@@ -598,7 +600,7 @@ function getRecentHistory(userId) {
       } else {
         let string = "Recent changes to this user: \n"
 
-        if (response.payload.results.length > 1) {
+        if (response.payload.results.length >= 1) {
           response.payload.results.forEach(function (item) {
             string += item.action + ' for "' + item.comment + '" from ' + item.senderUser + ' \n'
           })
