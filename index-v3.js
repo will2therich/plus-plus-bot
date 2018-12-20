@@ -516,7 +516,7 @@ function getUserFromSlackId(slackId) {
 function getUserFromAlias(alias, msg) {
   return new Promise((resolve, reject) => {
 
-    let searchParam = "alias," + alias.toString()
+    let searchParam = "alias," + alias.toString().toLowerCase()
     let params = {
       where: [searchParam]
     }
@@ -619,7 +619,8 @@ function getRecentHistory(userId) {
  */
 function resetBlocks() {
   let params = {
-    'greaterThan': ["bounceNumber,0"]
+    'greaterThan': ["bounceNumber,0"],
+    'orWhere': "blocked,1"
   }
 
   dv.queryData(devLessService, 'user', params, function (response) {
@@ -632,7 +633,8 @@ function resetBlocks() {
       response.payload.results.forEach(function (item) {
         // Update the sender
         let data = {
-          bounceNumber: 0
+          bounceNumber: 0,
+          blocked: 0
         }
         updateUser(item.id, data);
       })
