@@ -405,6 +405,7 @@ function createAlias(data, user) {
     if (response.status_code === 628) {
       if (authenticateDevless()) {
         createAlias(data, user)
+
       }
     } else {
       if (response.status_code === 609) {
@@ -468,6 +469,7 @@ function getUserFromDevLess(userId) {
       if (response.status_code === 628) {
         if (authenticateDevless()) {
           getUserFromDevLess(userId)
+          resolve()
         }
       } else {
         if (response.payload.results.length > 0) {
@@ -496,6 +498,7 @@ function getUserFromSlackId(slackId) {
       if (response.status_code === 628) {
         if (authenticateDevless()) {
           getUserFromDevLess(slackId)
+          resolve()
         }
       } else {
         if (response.payload.results.length > 0) {
@@ -525,11 +528,13 @@ function getUserFromAlias(alias, msg) {
       if (response.status_code === 628) {
         if (authenticateDevless()) {
           getUserFromAlias(alias)
+          resolve()
         }
       } else {
-        if (response.payload.results.length > 0) {
+        if (response.payload !== undefined && response.payload.results.length > 0) {
           resolve(response.payload.results[0]['user_id'])
         } else {
+          resolve(false)
           sendGeneralMessage(msg, "Alias: '" + alias + "' not found are you sure it exists?")
         }
       }
@@ -596,6 +601,8 @@ function getRecentHistory(userId) {
       if (response.status_code === 628) {
         if (authenticateDevless()) {
           getRecentHistory(userId)
+          resolve()
+
         }
       } else {
         let string = "Recent changes to this user: \n"
