@@ -11,7 +11,7 @@ const devLessUsername = process.env.BOT_API_USERNAME
 const devLessPassword = process.env.BOT_API_PASSWORD
 
 const dv = new DevLess(apiBaseUrl, devLessToken)
-const blockCount = process.env.BLOCK_COUNT
+const blockCount = 2
 
 // create a bot
 var bot = new SlackBot({
@@ -22,12 +22,17 @@ var bot = new SlackBot({
 bot.on('start' , function () {
   sendAdminMessage("`++Bot V3` Online")
   authenticateDevless();
+  var now = new Date();
+
+  var delay = 30 * 60 * 1000; // 30 mins in msec
+  var start = delay - (now.getMinutes() * 30 + now.getSeconds()) * 1000 + now.getMilliseconds();
+
 
   // Reauth every halfhour
-  setInterval(authenticateDevless, 1800)
+  setInterval(authenticateDevless, start)
 
   // Reset blocks every 30 mins
-  setInterval(resetBlocks, 1800)
+  setInterval(resetBlocks, start)
 })
 
 
