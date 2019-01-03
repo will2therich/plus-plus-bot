@@ -11,6 +11,7 @@ const devLessUsername = process.env.BOT_API_USERNAME
 const devLessPassword = process.env.BOT_API_PASSWORD
 
 const dv = new DevLess(apiBaseUrl, devLessToken)
+const blockCount = process.env.BLOCK_COUNT
 
 // create a bot
 var bot = new SlackBot({
@@ -23,10 +24,10 @@ bot.on('start' , function () {
   authenticateDevless();
 
   // Reauth every halfhour
-  setInterval(authenticateDevless, 1000 * 60 * 30)
+  setInterval(authenticateDevless, 1800)
 
-  // Reset blocks every 10 mins
-  setInterval(resetBlocks, 1000 * 60)
+  // Reset blocks every 30 mins
+  setInterval(resetBlocks, 1800)
 })
 
 
@@ -179,7 +180,7 @@ function addPointsToUser(message, msg) {
     }
     let senderUser = sender.payload.results[0]
 
-    if (senderUser.bounceNumber < 15 &&
+    if (senderUser.bounceNumber < blockCount &&
       senderUser.blocked === 0) {
 
 
@@ -260,7 +261,7 @@ function removePointsFromUser(message, msg) {
 
   let senderUser = sender.payload.results[0]
 
-  if (senderUser.bounceNumber < 15 &&
+  if (senderUser.bounceNumber < blockCount &&
     senderUser.blocked === 0) {
 
       getUserFromAlias(alias, msg).then(function (id) {
