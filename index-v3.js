@@ -36,7 +36,7 @@ function tick()
 {
   //get the mins of the current time
   var mins = new Date().getMinutes();
-  if(mins == "30"){
+  if(mins == "30" || mins == "00"){
     console.log("Running Tasks")
     authenticateDevless()
     resetBlocks()
