@@ -441,8 +441,8 @@ function deleteUser(userId) {
  */
 function authenticateDevless() {
   dv.authenticate('login', [devLessUsername, '', '', devLessPassword], function (response) {
-    console.dir(response)
     if (response.status_code === 637) {
+      console.dir('Authenticated')
       return true
     }
     return false
