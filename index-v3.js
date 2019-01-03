@@ -29,7 +29,7 @@ bot.on('start' , function () {
 
 
   // Reauth & clear blocks every 30 mins
-  setInterval(tick, 1000);
+  setInterval(tick, 60000);
 })
 
 function tick()
@@ -37,6 +37,7 @@ function tick()
   //get the mins of the current time
   var mins = new Date().getMinutes();
   if(mins == "30"){
+    console.log("Running Tasks")
     authenticateDevless()
     resetBlocks()
   }
