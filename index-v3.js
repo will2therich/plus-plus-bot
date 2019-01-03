@@ -22,27 +22,11 @@ var bot = new SlackBot({
 bot.on('start' , function () {
   sendAdminMessage("`++Bot V3` Online")
   authenticateDevless();
-  var now = new Date();
-
-  var delay = 30 * 60 * 1000; // 30 mins in msec
-  var start = delay - (now.getMinutes() * 30 + now.getSeconds()) * 1000 + now.getMilliseconds();
-
 
   // Reauth & clear blocks every 30 mins
-  setInterval(tick, 60000);
+  setInterval(resetBlocks, 60000 * 30);
+  setInterval(authenticateDevless, 60000 * 10);
 })
-
-function tick()
-{
-  authenticateDevless()
-  //get the mins of the current time
-  var mins = new Date().getMinutes();
-  if(mins == "30" || mins == "00"){
-    console.log("Running Tasks")
-    resetBlocks()
-  }
-  console.log('Tick ' + mins);
-}
 
 /**
  * When the bot turns on
@@ -646,9 +630,9 @@ function resetBlocks() {
 
   dv.queryData(devLessService, 'user', params, function (response) {
     if (response.status_code === 628) {
-      if (authenticateDevless()) {
-        resetBlocks()
-      }
+      authenticateDevless()
+      resetBlocks()
+
     } else {
 
       response.payload.results.forEach(function (item) {
