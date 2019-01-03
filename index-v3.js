@@ -28,13 +28,20 @@ bot.on('start' , function () {
   var start = delay - (now.getMinutes() * 30 + now.getSeconds()) * 1000 + now.getMilliseconds();
 
 
-  // Reauth every halfhour
-  setInterval(authenticateDevless, start)
-
-  // Reset blocks every 30 mins
-  setInterval(resetBlocks, start)
+  // Reauth & clear blocks every 30 mins
+  setInterval(tick, 1000);
 })
 
+function tick()
+{
+  //get the mins of the current time
+  var mins = new Date().getMinutes();
+  if(mins == "30"){
+    authenticateDevless()
+    resetBlocks()
+  }
+  console.log('Tick ' + mins);
+}
 
 /**
  * When the bot turns on
